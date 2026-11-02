@@ -131,7 +131,7 @@ class Snake(GameObject):
             Цвет объекта змейка. По умолчанию зеленого.
         position tuple[int, int]:
             Позиция объекта змейка в игровом окне. По умолчанию центр окна.
-        positions:
+        positions tuple[tuple[int, int]]:
             Список позиций всех элементов змейки. По умолчанию центр окна.
         length int:
             Количество элементов в змейке. По умолчанию 1.
@@ -147,7 +147,8 @@ class Snake(GameObject):
         self,
         body_color: tuple[int, int, int] = SNAKE_COLOR,
         position: tuple[int, int] = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
-        positions=[(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)],
+        positions: tuple[tuple[int, int]] = ((SCREEN_WIDTH // 2,
+                                              SCREEN_HEIGHT // 2),),
         length: int = 1,
         direction: tuple[int, int] = RIGHT,
         next_direction=None,
@@ -161,7 +162,7 @@ class Snake(GameObject):
                 Цвет объекта змейка.
             position tuple[int, int]:
                 Позиция объекта змейка в игровом окне. По умолчанию центр окна.
-            positions:
+            positions tuple[tuple[int, int]]:
                 Список позиций всех элементов змейки. По умолчанию центр окна.
             length int:
                 Количество элементов в змейке. По умолчанию 1.
@@ -175,7 +176,7 @@ class Snake(GameObject):
                 Позиция хвоста змейки в игровом окне. По умолчанию None.
         """
         super().__init__(body_color, position)
-        self.positions = positions
+        self.positions = list(positions)
         self.length = length
         self.direction = direction
         self.next_direction = next_direction
