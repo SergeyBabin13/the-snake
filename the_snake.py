@@ -147,7 +147,7 @@ class Snake(GameObject):
         self,
         body_color: tuple[int, int, int] = SNAKE_COLOR,
         position: tuple[int, int] = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
-        positions: list = [],
+        positions: list = [(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)],
         length: int = 1,
         direction: tuple[int, int] = RIGHT,
         next_direction=None,
@@ -180,7 +180,6 @@ class Snake(GameObject):
         self.direction = direction
         self.next_direction = next_direction
         self.last = last
-        list.insert(positions, 0, position)
 
     def get_head_position(
         self,
