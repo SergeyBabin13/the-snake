@@ -71,7 +71,7 @@ class GameObject:
         """Определяет необходимость переопределить метод в дочерних классах
         для отрисовки объекта на экране.
         """
-        raise NotImplementedError("Subclasses must implement this method")
+        raise NotImplementedError('Subclasses must implement this method')
 
 
 class Apple(GameObject):
