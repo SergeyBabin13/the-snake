@@ -110,6 +110,8 @@ class Apple(GameObject):
         position_width: int = randint(0, GRID_WIDTH - 1) * GRID_SIZE
         position_height: int = randint(0, GRID_HEIGHT - 1) * GRID_SIZE
         self.position = (position_width, position_height)
+        if self.position in Snake().positions:
+            self.randomize_position()
 
     # Метод draw класса Apple
     def draw(self):
@@ -145,11 +147,7 @@ class Snake(GameObject):
                 Позиция объекта змейка в игровом окне. По умолчанию центр окна.
         """
         super().__init__(body_color, position)
-        self.positions: list[tuple[int, int]] = [position]
-        self.length: int = 1
-        self.direction: tuple[int, int] = RIGHT
-        self.next_direction: tuple[int, int] | None = None
-        self.last: tuple[int, int] | None = None
+        self.reset()
 
     def get_head_position(
         self,
@@ -174,10 +172,6 @@ class Snake(GameObject):
         head_by_x, head_by_y = head
         new_head_by_x = (head_by_x + step_by_x * GRID_SIZE) % SCREEN_WIDTH
         new_head_by_y = (head_by_y + step_by_y * GRID_SIZE) % SCREEN_HEIGHT
-        if new_head_by_x < 0:
-            new_head_by_x += SCREEN_WIDTH
-        if new_head_by_y < 0:
-            new_head_by_y += SCREEN_HEIGHT
         new_of_head: tuple[int, int] = (new_head_by_x, new_head_by_y)
         list.insert(self.positions, 0, new_of_head)
         self.last = (
@@ -257,8 +251,6 @@ def main():
 
     while True:
         clock.tick(SPEED)
-
-        # Тут опишите основную логику игры.
         handle_keys(snake)
         snake.update_direction()
         snake.move()
@@ -268,8 +260,6 @@ def main():
         elif snake.get_head_position(snake.positions) in snake.positions[4::]:
             screen.fill(BOARD_BACKGROUND_COLOR)
             snake.reset()
-        while apple.position in snake.positions:
-            apple.randomize_position()
         apple.draw()
         snake.draw()
         pygame.display.update()
