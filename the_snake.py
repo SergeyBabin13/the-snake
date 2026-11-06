@@ -101,11 +101,18 @@ class Apple(GameObject):
         """
         super().__init__(body_color, position)
 
-    def randomize_position(self, taked_positions) -> None:
+    def randomize_position(
+        self, 
+        taked_positions: list[tuple[int, int]],
+    ) -> None:
         """Определяет рандомную позицию яблока в игровом окне.
 
         Функция рандомно определяет координаты по осям x и y
         с учетом размера игрового поля.
+
+        Args:
+            taked_positions list[tuple[int, int]]:
+                Позиции игрового поля занятые телом змейки.
         """
         while self.position in taked_positions or self.position is None:
             position_width: int = randint(0, GRID_WIDTH - 1) * GRID_SIZE
