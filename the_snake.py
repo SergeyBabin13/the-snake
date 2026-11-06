@@ -101,17 +101,16 @@ class Apple(GameObject):
         """
         super().__init__(body_color, position)
 
-    def randomize_position(self) -> None:
+    def randomize_position(self, taked_positions) -> None:
         """Определяет рандомную позицию яблока в игровом окне.
 
         Функция рандомно определяет координаты по осям x и y
         с учетом размера игрового поля.
         """
-        position_width: int = randint(0, GRID_WIDTH - 1) * GRID_SIZE
-        position_height: int = randint(0, GRID_HEIGHT - 1) * GRID_SIZE
-        self.position = (position_width, position_height)
-        if self.position in Snake().positions:
-            self.randomize_position()
+        while self.position in taked_positions or self.position is None:
+            position_width: int = randint(0, GRID_WIDTH - 1) * GRID_SIZE
+            position_height: int = randint(0, GRID_HEIGHT - 1) * GRID_SIZE
+            self.position = (position_width, position_height)
 
     # Метод draw класса Apple
     def draw(self):
@@ -149,10 +148,7 @@ class Snake(GameObject):
         super().__init__(body_color, position)
         self.reset()
 
-    def get_head_position(
-        self,
-        positions,
-    ) -> tuple[int, int]:
+    def get_head_position(self) -> tuple[int, int]:
         """Возвращает позицию головного элемента змейки.
 
         Args:
@@ -161,13 +157,13 @@ class Snake(GameObject):
         Returns:
         tuple[int, int]: Кортеж двух целых чисел.
         """
-        return positions[0]
+        return self.positions[0]
 
     def move(self) -> None:
         """Определяет позицию головного элемента змейки при движении.
         Убирает след змейки при превышении её длины.
         """
-        head: tuple[int, int] = self.get_head_position(self.positions)
+        head: tuple[int, int] = self.get_head_position()
         step_by_x, step_by_y = self.direction
         head_by_x, head_by_y = head
         new_head_by_x = (head_by_x + step_by_x * GRID_SIZE) % SCREEN_WIDTH
@@ -200,7 +196,7 @@ class Snake(GameObject):
 
         # Отрисовка головы змейки
         head_rect = pygame.Rect(
-            self.get_head_position(self.positions),
+            self.get_head_position(),
             (GRID_SIZE, GRID_SIZE),
         )
         pygame.draw.rect(screen, self.body_color, head_rect)
@@ -246,18 +242,18 @@ def main():
     # Инициализация PyGame:
     pygame.init()
     apple = Apple()
-    apple.randomize_position()
     snake = Snake()
+    apple.randomize_position(snake.positions)
 
     while True:
         clock.tick(SPEED)
         handle_keys(snake)
         snake.update_direction()
         snake.move()
-        if apple.position == snake.get_head_position(snake.positions):
+        if apple.position == snake.get_head_position():
             snake.length += 1
-            apple.randomize_position()
-        elif snake.get_head_position(snake.positions) in snake.positions[4::]:
+            apple.randomize_position(snake.positions)
+        elif snake.get_head_position() in snake.positions[4::]:
             screen.fill(BOARD_BACKGROUND_COLOR)
             snake.reset()
         apple.draw()
