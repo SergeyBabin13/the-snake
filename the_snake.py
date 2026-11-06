@@ -102,7 +102,7 @@ class Apple(GameObject):
         super().__init__(body_color, position)
 
     def randomize_position(
-        self, 
+        self,
         taked_positions: list[tuple[int, int]],
     ) -> None:
         """Определяет рандомную позицию яблока в игровом окне.
